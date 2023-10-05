@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:16.0-alpine3.18
+    restart: always
+    tty: true
+    volumes:
+      - ./tmp/postgres/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=pdv_rails_api_development
+    ports:
+      - "5432:5432"
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    tty: true
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@user.com
+      - PGADMIN_DEFAULT_PASSWORD=123456
+    ports:
+      - "9000:80"
+    depends_on:
+      - db
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
